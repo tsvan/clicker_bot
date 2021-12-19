@@ -12,19 +12,21 @@ class App:
     def __init__(self):
         self.stop_event = threading.Event()
         self.stop_event.set()
+        self.service = BotService()
 
     def run_script(self):
+        self.service.before_start()
         c_print(f'Script Started. To stop script press {STOP_KEY}')
         self.stop_event.clear()
 
     def stop(self):
         c_print('Script Stopped')
         self.stop_event.set()
+        self.service.after_stop()
 
     def start(self):
         print(f'Press {START_KEY} to start script')
-        service = BotService()
-        t = threading.Thread(target=service.run, args=(self.stop_event, "task"))
+        t = threading.Thread(target=self.service.run, args=(self.stop_event,))
         t.start()
         keyboard.add_hotkey(STOP_KEY, self.stop)
         keyboard.add_hotkey(START_KEY, self.run_script)
