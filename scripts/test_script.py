@@ -1,10 +1,11 @@
 import time
 from scripts.base_script import BaseScript
-
+from screen_maker import ScreenMaker
 
 class TestScript(BaseScript):
     def run(self):
-        print('run test script')
+        path = ScreenMaker.get_folder_path('screens')
+        print(path)
         time.sleep(1)
 
     def before_start(self):
