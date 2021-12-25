@@ -1,2 +1,6 @@
 pyautogui
 keyboard
+pytesseract
+pywin32
+python-dotenv
+opencv-python

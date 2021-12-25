@@ -6,10 +6,10 @@ import random
 class GameActions:
 
     @staticmethod
-    def mouse_click(x, y, duration=random.uniform(0.1, 0.2)):
-        pyautogui.moveTo(x, y, duration)
+    def mouse_click(x, y,  duration=random.uniform(0.05, 0.1)):
+        pyautogui.moveTo(x, y)
         pyautogui.mouseDown()
-        time.sleep(random.uniform(0.1, 0.2))
+        time.sleep(duration)
         pyautogui.mouseUp()
 
     @staticmethod
@@ -30,3 +30,21 @@ class GameActions:
     @staticmethod
     def direct_key_press(key):
         TypeKey(key)
+
+    @staticmethod
+    def type_digits(number):
+        arr = map(int, str(number))
+        dictionary = {
+            0: DIK_0,
+            1: DIK_1,
+            2: DIK_2,
+            3: DIK_3,
+            4: DIK_4,
+            5: DIK_5,
+            6: DIK_6,
+            7: DIK_7,
+            8: DIK_8,
+            9: DIK_9,
+        }
+        for digit in arr:
+            TypeKey(dictionary[digit])

@@ -12,12 +12,21 @@ class ScreenMaker:
         return str(path)
 
     @staticmethod
+    def get_path_to_image(folder, name):
+        dir_path = pathlib.Path().resolve()
+        img_folder = Path(dir_path, 'images')
+        path = Path(img_folder, folder, name)
+        return str(path)
+
+    @staticmethod
     def get_screenshot_region(x1, y1, x2, y2, name='region'):
-        screen = pyautogui.screenshot(ScreenMaker.get_folder_path('screens') + str(name) + ".png",
+        path = ScreenMaker.get_folder_path('screens') + "\\" + str(name) + ".png"
+        screen = pyautogui.screenshot(path,
                                       region=(x1, y1, (x2 - x1), (y2 - y1)))
         return screen
 
     @staticmethod
     def get_screenshot(name='all'):
-        screen = pyautogui.screenshot(ScreenMaker.get_folder_path('screens') + str(name) + ".png")
+        path = ScreenMaker.get_folder_path('screens') + "\\" + str(name) + ".png"
+        screen = pyautogui.screenshot(path)
         return screen

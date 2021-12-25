@@ -1,9 +1,10 @@
 from scripts.test_script import *
+from scripts.manor_l2_script import ManorL2Script
 
 
 class BotService:
     def __init__(self):
-        self.script = TestScript()
+        self.script = ManorL2Script()
 
     def before_start(self):
         self.script.before_start()
