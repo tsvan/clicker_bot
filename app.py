@@ -11,8 +11,11 @@ STOP_KEY: Final = 'Q'
 class App:
     def __init__(self):
         self.stop_event = threading.Event()
-        self.stop_event.set()
         self.service = BotService()
+        if not self.service.run_on_start:
+            self.stop_event.set()
+        else:
+            self.service.before_start()
 
     def run_script(self):
         self.service.before_start()

@@ -4,7 +4,8 @@ from scripts.manor_l2_script import ManorL2Script
 
 class BotService:
     def __init__(self):
-        self.script = ManorL2Script()
+        self.script = TestScript()
+        self.run_on_start = False
 
     def before_start(self):
         self.script.before_start()

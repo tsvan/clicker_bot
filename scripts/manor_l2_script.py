@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 
 user32 = ctypes.windll.user32
 
-
 DEFAULT_OFFSET_X = 10
 DEFAULT_OFFSET_Y = 35
 
@@ -66,6 +65,7 @@ class ManorL2Script(BaseScript):
         pass
 
     def before_start(self):
+        c_delay(5, 'starting')
         pass
 
     def after_stop(self):
@@ -77,7 +77,7 @@ class ManorL2Script(BaseScript):
             self.check_button_appear = 0
             check_x, check_y, w, h = check_button
             check_screen = ScreenMaker.get_screenshot_region(check_x - 100, check_y - 25, check_x + 100,
-                                                                check_y + 31, 'check_manor')
+                                                             check_y + 31, 'check_manor')
             config = r'--oem 3 --psm 6'
             str = pytesseract.image_to_string(check_screen, config=config, lang="rus+eng")
             try:
@@ -150,8 +150,6 @@ class ManorL2Script(BaseScript):
             GameActions.direct_key_press(DIK_F10)
             time.sleep(LOGIN_DELAY)
 
-
-
     def restartL2(self):
         crash_hwnd = win32gui.FindWindow(None, 'LineageII Crash Report')
         if crash_hwnd:
@@ -168,14 +166,13 @@ class ManorL2Script(BaseScript):
         time.sleep(1)
         self.login()
 
-
     def run(self):
         # get_cursor_position()
         # check_button = self.analyzer.find_check_window()
         # time.sleep(1)
         # return
         if self.firstRun:
-            # self.login()
+            self.login()
             self.main_delay = 1
             self.min_delay = 0.5
             self.firstRun = False
@@ -195,7 +192,7 @@ class ManorL2Script(BaseScript):
             time.sleep(self.main_delay)
             GameActions.direct_key_press(DIK_F2)
             if self.check_button_appear > 15:
-                # self.restartL2()
+                self.restartL2()
                 self.check_button_appear = 0
         except Exception as e:
             print('some exc', e)
