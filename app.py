@@ -1,4 +1,5 @@
 import threading
+import winsound
 from typing import Final
 import keyboard
 from bot_service import BotService
@@ -12,20 +13,19 @@ class App:
     def __init__(self):
         self.stop_event = threading.Event()
         self.service = BotService()
-        if not self.service.run_on_start:
-            self.stop_event.set()
-        else:
-            self.service.before_start()
+        self.stop_event.set()
 
     def run_script(self):
         self.service.before_start()
         c_print(f'Script Started. To stop script press {STOP_KEY}')
         self.stop_event.clear()
+        winsound.Beep(1600, 500)
 
     def stop(self):
         c_print('Script Stopped')
         self.stop_event.set()
         self.service.after_stop()
+        winsound.Beep(440, 500)
 
     def start(self):
         print(f'Press {START_KEY} to start script')
