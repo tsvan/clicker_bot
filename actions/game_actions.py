@@ -1,4 +1,7 @@
 import pyautogui
+import win32api
+import win32con
+
 from actions.direct_keys import *
 import random
 
@@ -48,3 +51,13 @@ class GameActions:
         }
         for digit in arr:
             TypeKey(dictionary[digit])
+
+    @staticmethod
+    def rotate_camera_l2():
+        pyautogui.mouseDown(button='right')
+        win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 100, 0, 0, 0)
+        pyautogui.mouseUp(button='right')
+
+    @staticmethod
+    def position():
+        return pyautogui.position()

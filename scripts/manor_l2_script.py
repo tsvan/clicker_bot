@@ -82,6 +82,7 @@ class ManorL2Script(BaseScript):
             str = pytesseract.image_to_string(check_screen, config=config, lang="rus+eng")
             try:
                 manor_sum = self.analyzer.find_check_sum(str)
+                print(manor_sum)
             except Exception as e:
                 print('count sum exc')
                 return False
@@ -172,7 +173,7 @@ class ManorL2Script(BaseScript):
         # time.sleep(1)
         # return
         if self.firstRun:
-            self.login()
+            # self.login()
             self.main_delay = 1
             self.min_delay = 0.5
             self.firstRun = False
@@ -192,9 +193,9 @@ class ManorL2Script(BaseScript):
             time.sleep(self.main_delay)
             GameActions.direct_key_press(DIK_F2)
             if self.check_button_appear > 15:
-                self.restartL2()
+                # self.restartL2()
                 self.check_button_appear = 0
         except Exception as e:
-            print('some exc', e)
+            print('some exc', e.with_traceback())
             return
         time.sleep(self.main_delay)
