@@ -5,9 +5,8 @@ from scripts.next_target_l2_script import NextTargetL2Script
 
 class BotService:
     def __init__(self):
-        # self.script = ManorL2Script()
-        self.script = NextTargetL2Script()
-
+        self.script = ManorL2Script()
+        # self.script = NextTargetL2Script()
 
     def before_start(self):
         self.script.before_start()

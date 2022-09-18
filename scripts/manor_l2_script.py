@@ -30,6 +30,8 @@ ACCEPT_LOGIN_BUTTON_POS = 616
 
 LOGIN_DELAY = 10
 GAME_START_DELAY = 30
+L2_SERVER = 'Asterios'
+L2_SERVER_NAME = 'Asterios Pride'
 
 MANOR_COUNT = '3'
 
@@ -156,11 +158,11 @@ class ManorL2Script(BaseScript):
         if crash_hwnd:
             win32gui.PostMessage(crash_hwnd, win32con.WM_CLOSE, 0, 0)
         time.sleep(1)
-        login_hwnd = win32gui.FindWindow(None, 'Asterios')
+        login_hwnd = win32gui.FindWindow(None, L2_SERVER)
         if login_hwnd:
             win32gui.PostMessage(login_hwnd, win32con.WM_CLOSE, 0, 0)
         time.sleep(1)
-        main_hwnd = win32gui.FindWindow(None, 'Asterios Prime')
+        main_hwnd = win32gui.FindWindow(None, L2_SERVER_NAME)
         if main_hwnd:
             win32gui.PostMessage(main_hwnd, win32con.WM_CLOSE, 0, 0)
 
@@ -173,7 +175,7 @@ class ManorL2Script(BaseScript):
         # time.sleep(1)
         # return
         if self.firstRun:
-            # self.login()
+            self.login()
             self.main_delay = 1
             self.min_delay = 0.5
             self.firstRun = False
@@ -193,7 +195,7 @@ class ManorL2Script(BaseScript):
             time.sleep(self.main_delay)
             GameActions.direct_key_press(DIK_F2)
             if self.check_button_appear > 15:
-                # self.restartL2()
+                self.restartL2()
                 self.check_button_appear = 0
         except Exception as e:
             print('some exc', e.with_traceback())
