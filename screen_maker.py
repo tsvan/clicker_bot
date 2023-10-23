@@ -21,12 +21,11 @@ class ScreenMaker:
     @staticmethod
     def get_screenshot_region(x1, y1, x2, y2, name='region'):
         path = ScreenMaker.get_folder_path('screens') + "\\" + str(name) + ".png"
-        screen = pyautogui.screenshot(path,
-                                      region=(x1, y1, (x2 - x1), (y2 - y1)))
+        screen = pyautogui.screenshot(region=(x1, y1, (x2 - x1), (y2 - y1)))
         return screen
 
     @staticmethod
     def get_screenshot(name='all'):
         path = ScreenMaker.get_folder_path('screens') + "\\" + str(name) + ".png"
-        screen = pyautogui.screenshot(path)
+        screen = pyautogui.screenshot()
         return screen

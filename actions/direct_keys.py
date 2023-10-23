@@ -112,7 +112,7 @@ def PressKeyFast(hexKeyCode):
     ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra))
     x = Input(ctypes.c_ulong(1), ii_)
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
-    time.sleep(random.uniform(0.1, 0.15))
+    time.sleep(random.uniform(0.05, 0.09))
 
 
 def ReleaseKey(hexKeyCode):
@@ -124,5 +124,5 @@ def ReleaseKey(hexKeyCode):
 
 
 def TypeKey(ValueKey):
-    PressKey(ValueKey)
+    PressKeyFast(ValueKey)
     ReleaseKey(ValueKey)

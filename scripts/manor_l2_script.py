@@ -36,13 +36,13 @@ L2_SERVER_NAME = 'Asterios Pride'
 MANOR_COUNT = '3'
 
 CITIES = {
-    # 0: 0,
-    # 1: 15,
-    2: 30,
-    # 3: 45,
-    # 4: 60,
-    # 5: 75,
-    # 6: 90,
+    '0': 0,
+    '1': 15,
+    '2': 30,
+    '3': 45,
+    '4': 60,
+    '5': 75,
+    '6': 90,
 }
 
 
@@ -116,11 +116,11 @@ class ManorL2Script(BaseScript):
             GameActions.mouse_click(x + DEFAULT_OFFSET_X, y + DEFAULT_OFFSET_Y)
             time.sleep(self.min_delay)
             # select city
-            number = random.choice(list(CITIES.values()))
+            number = CITIES[os.getenv('CITY_NUMBER')]
             GameActions.mouse_click(x + DEFAULT_OFFSET_X, y + 65 + number)
             # select count
             GameActions.mouse_click(x + DEFAULT_OFFSET_X, y + 60)
-            GameActions.type_digits(MANOR_COUNT)
+            GameActions.type_digits(os.getenv('SEED_COUNT'))
             # press accept
             accept_button = self.analyzer.find_accept_button()
             x, y, w, h = accept_button
@@ -175,7 +175,7 @@ class ManorL2Script(BaseScript):
         # time.sleep(1)
         # return
         if self.firstRun:
-            self.login()
+            # self.login()
             self.main_delay = 1
             self.min_delay = 0.5
             self.firstRun = False
@@ -195,7 +195,7 @@ class ManorL2Script(BaseScript):
             time.sleep(self.main_delay)
             GameActions.direct_key_press(DIK_F2)
             if self.check_button_appear > 15:
-                self.restartL2()
+                # self.restartL2()
                 self.check_button_appear = 0
         except Exception as e:
             print('some exc', e.with_traceback())

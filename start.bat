@@ -1,0 +1,1 @@
+F:\projects\py\clicker_bot\venv\Scripts\python.exe F:/projects/py/clicker_bot/main.py
