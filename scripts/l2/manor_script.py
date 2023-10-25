@@ -1,39 +1,22 @@
 from typing import Final
-from analyzers.manor_l2 import ManorScreenAnalyzer
-from actions.game_actions import *
+from analyzers.l2.manor import ManorScreenAnalyzer
+from action.game_actions import *
 from scripts.base_script import BaseScript
 from screen_maker import ScreenMaker
-from actions.game_actions import GameActions
+from action.game_actions import GameActions
 from helpers import *
 import pytesseract
-import win32gui
-import win32con
-import ctypes
 import os
 from dotenv import load_dotenv
 
-user32 = ctypes.windll.user32
+from scripts.l2.login_service import LoginService
 
 DEFAULT_OFFSET_X = 10
 DEFAULT_OFFSET_Y = 35
 
-CITY_OFFSET_Y = 10
-
 # delay
 DEFAULT_DELAY: Final = 0.3
 DEFAULT_MIN_DELAY: Final = 0.1
-
-LOGIN_BUTTONS_X = 583
-LOGIN_BUTTON_POS = 543
-AGREE_LOGIN_BUTTON_POS = 613
-ACCEPT_LOGIN_BUTTON_POS = 616
-
-LOGIN_DELAY = 10
-GAME_START_DELAY = 30
-L2_SERVER = 'Asterios'
-L2_SERVER_NAME = 'Asterios Pride'
-
-MANOR_COUNT = '3'
 
 CITIES = {
     '0': 0,
@@ -50,18 +33,12 @@ class ManorL2Script(BaseScript):
     def __init__(self):
         load_dotenv()
         self.analyzer = ManorScreenAnalyzer()
+        self.login_service = LoginService()
         self.firstRun = True
         self.main_delay = 1
         self.min_delay = 0.5
         self.check_button_appear = 0
-        self.savedPos = {
-            'first': [],
-            'manor_type': [],
-            'select_city': [],
-            'accept': [],
-            'sell': []
 
-        }
         pytesseract.pytesseract.tesseract_cmd = os.getenv('TESSERACT_PATH')
 
         pass
@@ -132,50 +109,13 @@ class ManorL2Script(BaseScript):
                 x, y, w, h = sell_button
                 GameActions.mouse_click(x + DEFAULT_OFFSET_X, y + DEFAULT_OFFSET_Y)
 
-    def login(self):
-        os.startfile(os.getenv('GAME_PATH'))
-        time.sleep(GAME_START_DELAY)
-
-        login_hwnd = win32gui.FindWindow(None, 'Asterios')
-        if login_hwnd:
-            user32.MoveWindow(login_hwnd, 0, 0, 1296, 839, False)
-            time.sleep(LOGIN_DELAY)
-            GameActions.mouse_click(LOGIN_BUTTONS_X, LOGIN_BUTTON_POS, 0.3)
-            GameActions.mouse_click(LOGIN_BUTTONS_X, LOGIN_BUTTON_POS, 0.3)
-            time.sleep(LOGIN_DELAY)
-            GameActions.mouse_click(LOGIN_BUTTONS_X, AGREE_LOGIN_BUTTON_POS, 0.3)
-            time.sleep(LOGIN_DELAY)
-            GameActions.mouse_click(LOGIN_BUTTONS_X, ACCEPT_LOGIN_BUTTON_POS, 0.3)
-            time.sleep(LOGIN_DELAY)
-            GameActions.direct_key_press(DIK_ENTER)
-            time.sleep(LOGIN_DELAY)
-            time.sleep(LOGIN_DELAY)
-            GameActions.direct_key_press(DIK_F10)
-            time.sleep(LOGIN_DELAY)
-
-    def restartL2(self):
-        crash_hwnd = win32gui.FindWindow(None, 'LineageII Crash Report')
-        if crash_hwnd:
-            win32gui.PostMessage(crash_hwnd, win32con.WM_CLOSE, 0, 0)
-        time.sleep(1)
-        login_hwnd = win32gui.FindWindow(None, L2_SERVER)
-        if login_hwnd:
-            win32gui.PostMessage(login_hwnd, win32con.WM_CLOSE, 0, 0)
-        time.sleep(1)
-        main_hwnd = win32gui.FindWindow(None, L2_SERVER_NAME)
-        if main_hwnd:
-            win32gui.PostMessage(main_hwnd, win32con.WM_CLOSE, 0, 0)
-
-        time.sleep(1)
-        self.login()
-
     def run(self):
         # get_cursor_position()
         # check_button = self.analyzer.find_check_window()
         # time.sleep(1)
         # return
         if self.firstRun:
-            # self.login()
+            # self.login_service.start()
             self.main_delay = 1
             self.min_delay = 0.5
             self.firstRun = False
@@ -195,7 +135,7 @@ class ManorL2Script(BaseScript):
             time.sleep(self.main_delay)
             GameActions.direct_key_press(DIK_F2)
             if self.check_button_appear > 15:
-                # self.restartL2()
+                # self.login_service.restart()
                 self.check_button_appear = 0
         except Exception as e:
             print('some exc', e.with_traceback())

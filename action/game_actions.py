@@ -2,7 +2,7 @@ import pyautogui
 import win32api
 import win32con
 
-from actions.direct_keys import *
+from action.direct_keys import *
 import random
 
 

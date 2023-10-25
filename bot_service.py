@@ -1,10 +1,8 @@
 import os
-
 from dotenv import load_dotenv
-
-from scripts.test_script import *
-from scripts.manor_l2_script import ManorL2Script
-from scripts.next_target_l2_script import NextTargetL2Script
+from scripts.dummy_script import *
+from scripts.l2.manor_script import ManorL2Script
+from scripts.l2.next_target_script import NextTargetL2Script
 
 scripts = {
     "Manor": ManorL2Script,
@@ -15,8 +13,7 @@ scripts = {
 class BotService:
     def __init__(self):
         load_dotenv()
-        self.script = scripts.get(os.getenv('SCRIPT_NAME'), TestScript)()
-        # self.script = NextTargetL2Script()
+        self.script = scripts.get(os.getenv('SCRIPT_NAME'), DummyScript)()
 
     def before_start(self):
         self.script.before_start()

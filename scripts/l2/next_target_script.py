@@ -1,9 +1,9 @@
 import threading
 import time
 
-from actions.direct_keys import *
-from actions.game_actions import GameActions
-from analyzers.next_target_l2 import NextTargetScreenAnalyzer
+from action.direct_keys import *
+from action.game_actions import GameActions
+from analyzers.l2.next_target import NextTargetScreenAnalyzer
 from screen_maker import ScreenMaker
 from scripts.base_script import BaseScript
 from helpers import *
@@ -128,7 +128,7 @@ class NextTargetL2Script(BaseScript):
 
         if my_health < CHARACTER_HP_USE_HEAL:
             # use hp potion
-            GameActions.direct_key_press(DIK_F6)
+            GameActions.direct_key_press(DIK_F8)
 
         if mob_health > 0:
             if self.mob_max_hp_count > 30:
@@ -136,7 +136,8 @@ class NextTargetL2Script(BaseScript):
                 GameActions.rotate_camera_l2()
                 self.mob_max_hp_count = 0
             if mob_health > MAX_MOB_HP:
-                # SpoilGameAction.spoil()
+                # manor
+                GameActions.direct_key_press(DIK_F6)
                 # attack
                 GameActions.direct_key_press(DIK_F1)
                 self.mob_max_hp_count += 1
@@ -164,6 +165,8 @@ class NextTargetL2Script(BaseScript):
                 GameActions.direct_key_press(DIK_F4)
                 GameActions.direct_key_press(DIK_F4)
                 GameActions.direct_key_press(DIK_F4)
+                # harvest
+                GameActions.direct_key_press(DIK_F7)
                 # continue
             if self.mob_not_found_try > MOB_SEARCH_MAX_COUNT:
                 move_x, move_y = IF_MOB_NOT_FOUND_MOVE[random.randint(0, 2)]
