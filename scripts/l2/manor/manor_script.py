@@ -1,5 +1,4 @@
 from typing import Final
-from analyzers.l2.manor import ManorScreenAnalyzer
 from action.game_actions import *
 from scripts.base_script import BaseScript
 from screen_maker import ScreenMaker
@@ -10,6 +9,7 @@ import os
 from dotenv import load_dotenv
 
 from scripts.l2.login_service import LoginService
+from scripts.l2.manor.manor_analyzer import ManorScreenAnalyzer
 
 DEFAULT_OFFSET_X = 10
 DEFAULT_OFFSET_Y = 35
@@ -115,7 +115,7 @@ class ManorL2Script(BaseScript):
         # time.sleep(1)
         # return
         if self.firstRun:
-            # self.login_service.start()
+            self.login_service.start()
             self.main_delay = 1
             self.min_delay = 0.5
             self.firstRun = False
@@ -135,7 +135,7 @@ class ManorL2Script(BaseScript):
             time.sleep(self.main_delay)
             GameActions.direct_key_press(DIK_F2)
             if self.check_button_appear > 15:
-                # self.login_service.restart()
+                self.login_service.restart()
                 self.check_button_appear = 0
         except Exception as e:
             print('some exc', e.with_traceback())

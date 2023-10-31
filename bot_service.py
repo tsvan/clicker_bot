@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
 from scripts.dummy_script import *
-from scripts.l2.manor_script import ManorL2Script
-from scripts.l2.next_target_script import NextTargetL2Script
+from scripts.l2.manor.manor_script import ManorL2Script
+from scripts.l2.farm.next_target_script import NextTargetL2Script
 
 scripts = {
     "Manor": ManorL2Script,

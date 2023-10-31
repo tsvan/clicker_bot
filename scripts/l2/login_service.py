@@ -23,15 +23,17 @@ L2_SERVER_NAME = 'Asterios Pride'
 
 
 class LoginService:
-    def __int__(self):
+    def __init__(self):
         load_dotenv()
-        pass
+        self.path = os.getenv('GAME_PATH')
+        self.l2_server = L2_SERVER
+        self.l2_server_name = L2_SERVER_NAME
 
     def start(self):
-        os.startfile(os.getenv('GAME_PATH'))
+        os.startfile(self.path)
         time.sleep(GAME_START_DELAY)
 
-        login_hwnd = win32gui.FindWindow(None, 'Asterios')
+        login_hwnd = win32gui.FindWindow(None, self.l2_server)
         if login_hwnd:
             user32.MoveWindow(login_hwnd, 0, 0, 1296, 839, False)
             time.sleep(LOGIN_DELAY)
@@ -47,22 +49,26 @@ class LoginService:
             time.sleep(LOGIN_DELAY)
             GameActions.direct_key_press(DIK_F10)
             time.sleep(LOGIN_DELAY)
-        pass
 
     def restart(self):
         crash_hwnd = win32gui.FindWindow(None, 'LineageII Crash Report')
         if crash_hwnd:
             win32gui.PostMessage(crash_hwnd, win32con.WM_CLOSE, 0, 0)
         time.sleep(1)
-        login_hwnd = win32gui.FindWindow(None, L2_SERVER)
+        login_hwnd = win32gui.FindWindow(None, self.l2_server)
         if login_hwnd:
             win32gui.PostMessage(login_hwnd, win32con.WM_CLOSE, 0, 0)
         time.sleep(1)
-        main_hwnd = win32gui.FindWindow(None, L2_SERVER_NAME)
+        main_hwnd = win32gui.FindWindow(None, self.l2_server_name)
         if main_hwnd:
             win32gui.PostMessage(main_hwnd, win32con.WM_CLOSE, 0, 0)
 
         time.sleep(1)
 
         self.start()
-        pass
+
+    def move_window(self):
+        login_hwnd = win32gui.FindWindow(None, self.l2_server)
+        if login_hwnd:
+            user32.MoveWindow(login_hwnd, 0, 0, 1296, 839, False)
+            time.sleep(3)

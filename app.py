@@ -1,3 +1,4 @@
+import os
 import threading
 import winsound
 from typing import Final
@@ -26,6 +27,7 @@ class App:
         self.stop_event.set()
         self.service.after_stop()
         winsound.Beep(440, 500)
+        os._exit(1)
 
     def start(self):
         print(f'Press {START_KEY} to start script')

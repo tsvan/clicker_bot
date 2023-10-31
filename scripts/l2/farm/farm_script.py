@@ -3,10 +3,10 @@ import time
 
 from action.direct_keys import *
 from action.game_actions import GameActions
-from analyzers.l2.next_target import NextTargetScreenAnalyzer
 from screen_maker import ScreenMaker
 from scripts.base_script import BaseScript
 from helpers import *
+from scripts.l2.farm.next_target_analyzer import NextTargetScreenAnalyzer
 
 # максимальный уровень хп монстра
 MAX_MOB_HP = 110
@@ -40,7 +40,7 @@ Right_Bottom_X, Right_Bottom_Y = 1279, 757
 Bar_X, Bar_Y = 809, 129
 
 
-class NextTargetL2Script(BaseScript):
+class FarmL2Script(BaseScript):
 
     def __init__(self):
         self.mob_not_found_try = 0
@@ -58,7 +58,7 @@ class NextTargetL2Script(BaseScript):
         # F5 - next target
         GameActions.direct_key_press(DIK_F5)
         screen = ScreenMaker.get_screenshot_region(Left_Top_X, Left_Top_Y, (Bar_X - Left_Top_X),
-                                              (Bar_Y - Left_Top_Y), "bar")
+                                                   (Bar_Y - Left_Top_Y), "bar")
         mob_health = NextTargetScreenAnalyzer.get_mob_health(screen)
         if mob_health == 0:
             return False
@@ -78,9 +78,8 @@ class NextTargetL2Script(BaseScript):
         if not self.move_mouse_to_find_mob(x - 10, y + MOB_SEARCH_FIRST_MOVE_Y, x + 40, y + MOB_SEARCH_MOVE_TO_Y):
             self.move_mouse_to_find_mob(x + 40, y + MOB_SEARCH_FIRST_MOVE_Y, x - 10, y + MOB_SEARCH_MOVE_TO_Y)
 
-
         screen = ScreenMaker.get_screenshot_region(Left_Top_X, Left_Top_Y, (Bar_X - Left_Top_X),
-                                              (Bar_Y - Left_Top_Y), "bar")
+                                                   (Bar_Y - Left_Top_Y), "bar")
         mob_health = NextTargetScreenAnalyzer.get_mob_health(screen)
         if mob_health == 0:
             # GameActions.direct_key_press(DIK_DOWN)
@@ -93,7 +92,7 @@ class NextTargetL2Script(BaseScript):
         mob_screen_y2 = y2 + MOB_SEARCH_SCREEN_Y2
 
         if not self.check_coords([x1, x2, mob_screen_x1, mob_screen_x2],
-                                           [y1, y2, mob_screen_y1, mob_screen_y2]):
+                                 [y1, y2, mob_screen_y1, mob_screen_y2]):
             print(x1, y1, x2, y2)
             return False
         GameActions.mouse_move_to(x1, y1, 0)
@@ -101,7 +100,8 @@ class NextTargetL2Script(BaseScript):
                              args=(x2, y2, 1))
         t.start()
         while t.is_alive():
-            screen = ScreenMaker.get_screenshot_region(mob_screen_x1, mob_screen_y1, mob_screen_x2, mob_screen_y2, 'mob')
+            screen = ScreenMaker.get_screenshot_region(mob_screen_x1, mob_screen_y1, mob_screen_x2, mob_screen_y2,
+                                                       'mob')
             targeted_bar = NextTargetScreenAnalyzer.find_mob_targeted(screen)
             if targeted_bar != 0:
                 x, y = GameActions.position()
@@ -122,7 +122,7 @@ class NextTargetL2Script(BaseScript):
 
     def run(self):
         screen = ScreenMaker.get_screenshot_region(Left_Top_X, Left_Top_Y, (Bar_X - Left_Top_X),
-                                              (Bar_Y - Left_Top_Y), "bar")
+                                                   (Bar_Y - Left_Top_Y), "bar")
 
         my_health, mob_health = NextTargetScreenAnalyzer.pixels_check(screen)
 
@@ -178,4 +178,4 @@ class NextTargetL2Script(BaseScript):
             # Раскоментить для запуска поиска мобов по иконке
             # screen = ScreenMaker.get_screenshot_region(Left_Top_X, Left_Top_Y, (Right_Bottom_X - Left_Top_X),
             #                                   (Right_Bottom_Y - Left_Top_Y), "next_target_main")
-            #self.find_next_mob(screen)
+            # self.find_next_mob(screen)
