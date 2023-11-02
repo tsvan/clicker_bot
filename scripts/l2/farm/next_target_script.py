@@ -8,7 +8,7 @@ from screen_maker import ScreenMaker
 from scripts.base_script import BaseScript
 from helpers import *
 from scripts.l2.farm.next_target_analyzer import NextTargetScreenAnalyzer
-from scripts.l2.login_service import *
+from scripts.l2.login_script import *
 
 # максимальный уровень хп монстра
 MAX_MOB_HP = 110
@@ -30,7 +30,7 @@ Bar_X, Bar_Y = 809, 129
 class NextTargetL2Script(BaseScript):
 
     def __init__(self):
-        self.login_service = LoginService()
+        self.login_service = LoginScript()
         # Кнопки которые использует бот
         # spoil/manor
         self.before_attack_btn = DIK_F6

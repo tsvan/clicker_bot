@@ -22,7 +22,7 @@ L2_SERVER = 'Asterios'
 L2_SERVER_NAME = 'Asterios Pride'
 
 
-class LoginService:
+class LoginScript:
     def __init__(self):
         load_dotenv()
         self.path = os.getenv('GAME_PATH')
