@@ -3,6 +3,7 @@ import logging
 import os
 import time
 
+import pyautogui
 import win32con
 import win32gui
 from dotenv import load_dotenv
@@ -33,6 +34,20 @@ class LoginScript:
         time.sleep(1)
         GameActions.mouse_click(login1_x + DEFAULT_OFFSET_X, login1_y + DEFAULT_OFFSET_Y, 0.3)
         GameActions.mouse_click(login1_x + DEFAULT_OFFSET_X, login1_y + DEFAULT_OFFSET_Y, 0.3)
+
+        #Проверка если зависает при входе, закрываем окно.
+        time.sleep(5)
+        screen = self.screen_service.get_screenshot_window()
+        cancel_screen = pyautogui.locate(self.screen_service.get_path_to_image("l2_login", "login_cancel.png"), screen,confidence=0.8)
+        if cancel_screen:
+            cancel_x, cancel_y,_,_ = cancel_screen
+            # кликаем отмену и потом релог на шаг 1
+            GameActions.mouse_click(cancel_x + DEFAULT_OFFSET_X, cancel_y + DEFAULT_OFFSET_Y, 0.3)
+            time.sleep(2)
+            login1_x, login1_y, _, _ = self.screen_service.find_img_with_attempts("login1.png", False, 20, 1,confidence=.8)
+            time.sleep(1)
+            GameActions.mouse_click(login1_x + DEFAULT_OFFSET_X, login1_y + DEFAULT_OFFSET_Y, 0.3)
+            GameActions.mouse_click(login1_x + DEFAULT_OFFSET_X, login1_y + DEFAULT_OFFSET_Y, 0.3)
 
         login2_x, login2_y, _, _ = self.screen_service.find_img_with_attempts("login2.png", False, 20, 1, confidence=.8)
         time.sleep(1)
