@@ -1,3 +1,4 @@
+import logging
 import os
 from dotenv import load_dotenv
 from scripts.dummy_script import *

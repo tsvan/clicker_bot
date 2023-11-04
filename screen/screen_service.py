@@ -55,7 +55,7 @@ class ScreenService:
                 # Тут img_name как ключ в массиве сохранённых координат.
                 # Если искать одинаковое изображение разными вызовами могут быть проблемы
                 self.savedPos[img_name] = []
-                raise TimeoutError("attempts ends, img-", img_name)
+                raise TimeoutError(f"{attempt} attempts ends, img-{img_name}")
 
             if with_save and img_name in self.savedPos and self.savedPos[img_name]:
                 x, y, w, h = self.savedPos[img_name]

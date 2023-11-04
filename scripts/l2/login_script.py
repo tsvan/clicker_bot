@@ -1,4 +1,5 @@
 import ctypes
+import logging
 import os
 import time
 
@@ -28,19 +29,21 @@ class LoginScript:
         self.after_login_action = after_login_action
 
     def _login_actions(self):
-
         login1_x, login1_y, _, _ = self.screen_service.find_img_with_attempts("login1.png", False, 20, 1, confidence=.8)
+        time.sleep(1)
         GameActions.mouse_click(login1_x + DEFAULT_OFFSET_X, login1_y + DEFAULT_OFFSET_Y, 0.3)
         GameActions.mouse_click(login1_x + DEFAULT_OFFSET_X, login1_y + DEFAULT_OFFSET_Y, 0.3)
-        # GameActions.mouse_click(login1_x+DEFAULT_OFFSET_X, login1_y, 0.3)
 
         login2_x, login2_y, _, _ = self.screen_service.find_img_with_attempts("login2.png", False, 20, 1, confidence=.8)
+        time.sleep(1)
         GameActions.mouse_click(login2_x + DEFAULT_OFFSET_X, login2_y + DEFAULT_OFFSET_Y, 0.3)
 
         login3_x, login3_y, _, _ = self.screen_service.find_img_with_attempts("login3.png", False, 20, 1, confidence=.8)
+        time.sleep(1)
         GameActions.mouse_click(login3_x + DEFAULT_OFFSET_X, login3_y + DEFAULT_OFFSET_Y, 0.3)
 
         login4_x, login4_y, _, _ = self.screen_service.find_img_with_attempts("login4.png", False, 20, 1, confidence=.8)
+        time.sleep(1)
         GameActions.mouse_click(login4_x + DEFAULT_OFFSET_X, login4_y + DEFAULT_OFFSET_Y, 0.3)
 
         time.sleep(self.after_login_delay)
@@ -52,7 +55,7 @@ class LoginScript:
         time.sleep(self.game_start_delay)
         login_hwnd = win32gui.FindWindow(None, self.l2_server)
         if not login_hwnd:
-            print("can't start game")
+            logging.error("can't start game")
             return
 
         user32.MoveWindow(login_hwnd, 0, 0, 1296, 839, False)
@@ -61,7 +64,7 @@ class LoginScript:
         try:
             self._login_actions()
         except Exception as e:
-            print('Login Exc:', str(e))
+            logging.error('Login Exc:', str(e))
             return
 
     def restart(self):

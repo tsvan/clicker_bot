@@ -1,12 +1,13 @@
 import json
+import logging
 import pathlib
+import sys
 import time
 from typing import Final
 from action.game_actions import *
 from screen.screen_service import ScreenService
 from scripts.base_script import BaseScript
 from action.game_actions import GameActions
-from helpers import *
 import pytesseract
 import os
 import re
@@ -32,27 +33,29 @@ CITIES_OFFSET = {
 class ManorL2Script(BaseScript):
     def __init__(self):
         load_dotenv()
+        pytesseract.pytesseract.tesseract_cmd = os.getenv('TESSERACT_PATH')
+
         self.login_script = LoginScript(os.getenv('GAME_PATH'), 'Asterios', 'Asterios Pride', 20, 10,
                                         GameActions.direct_key_press)
+
         self.screen_service = ScreenService(0, 0, 1280, 800, "manor_l2")
+
         self.firstRun = True
-
         self.attempt = 0
-
         self.manor_opts_iterator = {}
         self.current_manor_opts = {}
         self.seed_for_sale = {}
 
+    def before_start(self):
+        logging.info("F2 - макрос на тагрет npc. F10 - сесть/встать")
         # получаем данные куда и сколько плодов сдавать из json конфига
         self.parse_manor_opts()
 
-        pytesseract.pytesseract.tesseract_cmd = os.getenv('TESSERACT_PATH')
-
-        pass
-
-    def before_start(self):
-        # c_delay(5, 'starting')
-        pass
+        for i in range(1, 6):
+            sys.stdout.write("\rStart in 5 sec. Starting %d..." % i)
+            sys.stdout.flush()
+            time.sleep(1)
+        print('\n')
 
     def after_stop(self):
         pass
@@ -78,13 +81,12 @@ class ManorL2Script(BaseScript):
     def parse_manor_opts(self):
         data = json.load(open(self.screen_service.get_folder_path('static') + '\\manor.json'))
         for seed in data['manor']:
-            print(data['manor'][seed])
             self.seed_for_sale[seed] = True
             self.manor_opts_iterator[seed] = cycle(data['manor'][seed])
             self.current_manor_opts[seed] = next(self.manor_opts_iterator[seed])
-            # for city_opt in data['manor'][seed]:
-            #
-            #     print(city_opt['seed_count'], city_opt['city_number'])
+            logging.info(f'ПЛОД: {seed}:')
+            for city_opt in data['manor'][seed]:
+                logging.info(f"номер города:{city_opt['city_number']} количество семян:{city_opt['seed_count']}")
 
     def select_city_window_stage(self, seed):
         drop_down = self.screen_service.find_img_with_attempts("manor4.png", True)
@@ -114,7 +116,7 @@ class ManorL2Script(BaseScript):
             # Проверка не закончились ли плоды (по белому пикселю в названии плода)
             check_seed_screen = self.screen_service.get_screenshot_region(seed_x - 5, seed_y - 2, seed_x + 50,
                                                                           seed_y + 2)
-            seed_exist = self.screen_service.pixel_check(check_seed_screen,(215, 215, 215))
+            seed_exist = self.screen_service.pixel_check(check_seed_screen, (215, 215, 215))
             if seed_exist > 0:
                 GameActions.mouse_click(seed_x, seed_y)
                 GameActions.mouse_click(seed_x, seed_y)
@@ -128,22 +130,25 @@ class ManorL2Script(BaseScript):
             i += 1
             time.sleep(DEFAULT_DELAY)
 
-    def last_window_stage(self):
-        last_window = self.screen_service.find_img_with_attempts("manor_sell.png", True, confidence=.9)
-        if last_window:
-            x, y, w, h = last_window
-            GameActions.mouse_click(x + DEFAULT_OFFSET_X, y)
+    def check_unexpected_window(self):
+        window = self.screen_service.get_screenshot_window()
+        location = pyautogui.locate(self.screen_service.get_path_to_image("manor_l2", "manor_cancel.png"), window,
+                                    confidence=0.9)
+        if location:
+            logging.warning('Find unexpected window')
+            x, y, _, _ = location
+            GameActions.mouse_click(x + DEFAULT_OFFSET_X, y + 5)
 
     def run(self):
         if self.firstRun:
-            # self.login_script.start()
+            self.login_script.start()
             self.firstRun = False
             time.sleep(1)
         try:
             self.attempt += 1
             if self.attempt > 10:
                 self.attempt = 0
-                print('relog')
+                logging.info('relog')
                 self.login_script.restart()
 
             # Жмём макрос на таргет npc менеджера
@@ -161,9 +166,9 @@ class ManorL2Script(BaseScript):
 
             self.attempt = 0
         except Exception as e:
-            print('Exception:', str(e))
+            logging.error(f"ManorException {str(e)}")
+            # Проверка если что то багнуло и окно от преидущей сдачи не закрылось
+            self.check_unexpected_window()
             return
-
-        # self.current_manor_opts = next(self.manor_opts_iterator)
 
         time.sleep(DEFAULT_DELAY)

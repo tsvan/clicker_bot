@@ -1,3 +1,4 @@
+import logging
 import threading
 import time
 
@@ -48,7 +49,9 @@ class FarmL2Script(BaseScript):
         pass
 
     def before_start(self):
-        c_delay(5, 'starting')
+        for i in range(5):
+            logging.info(f'Starting {i} sec')
+            time.sleep(1)
         pass
 
     def after_stop(self):

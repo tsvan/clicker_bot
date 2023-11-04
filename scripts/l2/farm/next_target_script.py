@@ -1,3 +1,4 @@
+import logging
 import sys
 import threading
 import time
@@ -6,7 +7,6 @@ from action.direct_keys import *
 from action.game_actions import GameActions
 from screen_maker import ScreenMaker
 from scripts.base_script import BaseScript
-from helpers import *
 from scripts.l2.farm.next_target_analyzer import NextTargetScreenAnalyzer
 from scripts.l2.login_script import *
 
@@ -46,7 +46,10 @@ class NextTargetL2Script(BaseScript):
         self.after_mob_dead_btn = DIK_F7
 
     def before_start(self):
-        c_delay(5, 'starting')
+        for i in range(5):
+            logging.info(f'Starting {5 - i} sec')
+            time.sleep(1)
+
         self.login_service.move_window()
         time.sleep(2)
         pass
@@ -92,13 +95,13 @@ class NextTargetL2Script(BaseScript):
             return
 
         if my_health == 0:
-            print('i am dead')
+            logging.warning('i am dead')
             return
 
         # моб убит
         if mob_health == 0:
             mob_bar = NextTargetScreenAnalyzer.find_close_mob_bar_icon(screen)
-            print('mob_bar', mob_bar)
+            logging.info('mob_bar', mob_bar)
             if mob_bar != 0:
                 self.after_mob_dead()
             # next target
