@@ -61,15 +61,24 @@ class ManorL2Script(BaseScript):
         pass
 
     def check_window_stage(self):
-        check_button = self.screen_service.find_img_with_attempts("manor2.png", False)
+        # Находим окно капчи
+        check_window = self.screen_service.find_img_with_attempts("manor_check.png", True)
+        check_window_x, check_window_y, _, _ = check_window
+        # находим кнопку капчи в окне (для быстродействия что бы не делать фул скрин)
+        check_window_screen = self.screen_service.get_screenshot_region(check_window_x, check_window_y, 320, 360)
+        check_button = pyautogui.locate(self.screen_service.get_path_to_image("manor_l2", "manor2.png"),
+                                        check_window_screen,
+                                        confidence=.9)
+
         if check_button:
-            check_x, check_y, w, h = check_button
-            check_screen = self.screen_service.get_screenshot_region(check_x - 100, check_y - 56, 170, 56)
+            check_x, check_y, _, _ = check_button
+            check_screen = self.screen_service.get_screenshot_region(check_x + check_window_x - 100,
+                                                                     check_y + check_window_y - 56, 170, 56)
             config = r'--oem 3 --psm 6'
             captcha = pytesseract.image_to_string(check_screen, config=config, lang="rus+eng")
             manor_sum = self.find_check_sum(captcha)
             GameActions.type_digits(manor_sum)
-            GameActions.mouse_click(check_x + DEFAULT_OFFSET_X, check_y)
+            GameActions.mouse_click(check_x + check_window_x + DEFAULT_OFFSET_X, check_y + check_window_y)
 
     @staticmethod
     def find_check_sum(txt):
@@ -170,5 +179,3 @@ class ManorL2Script(BaseScript):
             # Проверка если что то багнуло и окно от преидущей сдачи не закрылось
             self.check_unexpected_window()
             return
-
-        time.sleep(DEFAULT_DELAY)

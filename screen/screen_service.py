@@ -47,7 +47,7 @@ class ScreenService:
                 count += 1
         return count
 
-    def find_img_with_attempts(self, img_name, with_save, attempts=20, timeout=0.1, confidence=.9):
+    def find_img_with_attempts(self, img_name, with_save, attempts=40, timeout=0.05, confidence=.9):
         attempt = 0
         while True:
             attempt += 1
