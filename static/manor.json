@@ -1,0 +1,7 @@
+{
+  "manor": {
+    "cobol1": [{"city_number": "1", "seed_count": "2"}, {"city_number": "2", "seed_count": "2"}],
+    "cobol2": [{"city_number": "5", "seed_count": "1"}, {"city_number": "6", "seed_count": "1"}],
+    "cobol3": [{"city_number": "5", "seed_count": "1"}]
+  }
+}

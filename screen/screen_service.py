@@ -33,7 +33,21 @@ class ScreenService:
         path = Path(img_folder, folder, name)
         return str(path)
 
-    def find_img_with_attempts(self, img_name, with_save, attempts=20, timeout=0.1, confidence=.8):
+    @staticmethod
+    def get_folder_path(folder):
+        dir_path = pathlib.Path().resolve()
+        path = Path(dir_path, folder)
+        return str(path)
+
+    @staticmethod
+    def pixel_check(screen, checked_pixel):
+        count = 0
+        for pixel in screen.getdata():
+            if pixel == checked_pixel:
+                count += 1
+        return count
+
+    def find_img_with_attempts(self, img_name, with_save, attempts=20, timeout=0.1, confidence=.9):
         attempt = 0
         while True:
             attempt += 1
