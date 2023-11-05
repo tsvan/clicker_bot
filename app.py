@@ -12,7 +12,10 @@ STOP_KEY: Final = 'Q'
 
 class App:
     def __init__(self):
-        logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", datefmt='%H:%M:%S')
+        file_log = logging.FileHandler('Log.log')
+        console_out = logging.StreamHandler()
+        logging.basicConfig(handlers=(file_log, console_out),level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", datefmt='%Y.%m.%d %H:%M:%S')
+
         self.stop_event = threading.Event()
         self.service = BotService()
         self.stop_event.set()

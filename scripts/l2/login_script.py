@@ -70,7 +70,7 @@ class LoginScript:
         time.sleep(self.game_start_delay)
         login_hwnd = win32gui.FindWindow(None, self.l2_server)
         if not login_hwnd:
-            logging.error("can't start game")
+            logging.exception("can't start game")
             return
 
         user32.MoveWindow(login_hwnd, 0, 0, 1296, 839, False)
@@ -79,7 +79,7 @@ class LoginScript:
         try:
             self._login_actions()
         except Exception as e:
-            logging.error('Login Exc:', str(e))
+            logging.exception('Login Exc:', str(e))
             return
 
     def restart(self):
